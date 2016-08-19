@@ -5,7 +5,13 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiSignageEditor.View.WPF", "RaspiSignageEditor.View.WPF\RaspiSignageEditor.View.WPF.csproj", "{36B253D7-41EC-4F6D-A525-43D9354A418E}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RaspiSignageEditor.Shared", "RaspiSignageEditor.Shared\RaspiSignageEditor.Shared.shproj", "{E582E945-89E7-4A9C-91F0-C0701C995FF1}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		RaspiSignageEditor.Shared\RaspiSignageEditor.Shared.projitems*{36b253d7-41ec-4f6d-a525-43d9354a418e}*SharedItemsImports = 4
+		RaspiSignageEditor.Shared\RaspiSignageEditor.Shared.projitems*{e582e945-89e7-4a9c-91f0-c0701c995ff1}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

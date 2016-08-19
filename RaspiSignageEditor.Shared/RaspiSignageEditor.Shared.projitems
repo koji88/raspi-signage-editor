@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e582e945-89e7-4a9c-91f0-c0701c995ff1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RaspiSignageEditor.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\RaspiSignageConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CommandViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GPIOViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OptionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PlayListViewModel.cs" />
+  </ItemGroup>
+</Project>
