@@ -13,8 +13,6 @@ namespace RaspiSignageEditor.Shared.ViewModels
         {
             get { return _key; }
             set {
-                if (!_key.Equals(value) && _valueChanged != null)
-                    _valueChanged();
                 this.RaiseAndSetIfChanged(ref _key, value);
             }
         }
@@ -24,21 +22,15 @@ namespace RaspiSignageEditor.Shared.ViewModels
         {
             get { return _value; }
             set {
-                if (!_value.Equals(value) && _valueChanged != null)
-                    _valueChanged();
-
                 this.RaiseAndSetIfChanged(ref _value, value);
             }
         }
 
-        public KeyValueSet(T1 key, T2 value,Action valueChanged = null)
+        public KeyValueSet(T1 key, T2 value)
         {
             _key = key;
             _value = value;
-            _valueChanged = valueChanged;  
         }
-
-        private Action _valueChanged;
     }
 
     public class GPIOViewModel : ReactiveObject
@@ -113,7 +105,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
                                 {
                                     if(int.TryParse(o.ToString(),out ivalue))
                                     {
-                                        nlist.Add(new KeyValueSet<int, int>(nlist.Count, ivalue, updateFuncNumbers));
+                                        nlist.Add(new KeyValueSet<int, int>(nlist.Count, ivalue));
                                     }
                                 }
                             }
@@ -122,7 +114,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
                             int ikey;
                             if(int.TryParse(v.Value.ToString(),out ivalue) && int.TryParse(v.Key,out ikey))
                             {
-                                ngpio.Add(new KeyValueSet<int, int>(ikey, ivalue, updateFuncNumbers));
+                                ngpio.Add(new KeyValueSet<int, int>(ikey, ivalue));
                             }
                             break;
                     }
@@ -163,15 +155,13 @@ namespace RaspiSignageEditor.Shared.ViewModels
 
             AddGPIOCommand = ReactiveCommand.Create();
             AddGPIOCommand.Subscribe(_ => {
-                _ngpio.Add(new KeyValueSet<int, int>(-1, -1, updateFuncNumbers));
-                updateFuncNumbers();
+                _ngpio.Add(new KeyValueSet<int, int>(-1, -1));
                 this.RaisePropertyChanged("NGPIO");
             });
 
             AddNCommand = ReactiveCommand.Create();
             AddNCommand.Subscribe(_ => {
-                _nlist.Add(new KeyValueSet<int, int>(_nlist.Count, -1, updateFuncNumbers));
-                updateFuncNumbers();
+                _nlist.Add(new KeyValueSet<int, int>(_nlist.Count, -1));
                 this.RaisePropertyChanged("NList");
             });
 
@@ -181,7 +171,6 @@ namespace RaspiSignageEditor.Shared.ViewModels
                 if (p is KeyValueSet<int,int>)
                 {
                     _ngpio.Remove((KeyValueSet<int,int>)p);
-                    updateFuncNumbers();
                     this.RaisePropertyChanged("NGPIO");
                 }
             });
@@ -193,7 +182,6 @@ namespace RaspiSignageEditor.Shared.ViewModels
                 if (p is KeyValueSet<int, int>)
                 {
                     _nlist.Remove((KeyValueSet<int,int>)p);
-                    updateFuncNumbers();
                     this.RaisePropertyChanged("NList");
                 }
             });
