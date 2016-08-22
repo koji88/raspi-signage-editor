@@ -54,17 +54,26 @@ namespace RaspiSignageEditor.Shared.ViewModels
         public MainViewModel(Interface.IFileChooserUi filechooser)
         {
             _gpio = new GPIOViewModel();
-            _option = new OptionViewModel();
-            _playlist = new PlayListViewModel();
+            _option = new OptionViewModel(filechooser);
+            _playlist = new PlayListViewModel(filechooser);
             _commands = new CommandViewModel();
 
-            _configData = new Data.RaspiSignageConfig();
             _configFilename = "raspi-signage.yml";
+
+            if(File.Exists(_configFilename))
+            {
+                var result = Data.RaspiSignageConfig.LoadData(_configFilename);
+                if (result.Item1)
+                    _configData = result.Item2;
+            }
+
+            if (_configData == null)
+                _configData = new Data.RaspiSignageConfig();
 
             OpenFileCommand = ReactiveCommand.Create();
             OpenFileCommand.Subscribe(_ =>
             {
-                var filename = filechooser.ChooseOpenFile().Result;
+                var filename = filechooser.ChooseOpenYamlFile().Result;
                 if (File.Exists(filename))
                 {
                     var result = Data.RaspiSignageConfig.LoadData(filename);
@@ -91,7 +100,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
             SaveFileAsCommand = ReactiveCommand.Create();
             SaveFileAsCommand.Subscribe(_ =>
             {
-                var filename = filechooser.ChooseSaveFile(_configFilename).Result;
+                var filename = filechooser.ChooseSaveYamlFile(_configFilename).Result;
                 if(!string.IsNullOrEmpty(filename))
                 {
                     _configFilename = filename;

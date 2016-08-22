@@ -7,7 +7,9 @@ namespace RaspiSignageEditor.Shared.Interface
 {
     public interface IFileChooserUi
     {
-        Task<string> ChooseOpenFile();
-        Task<string> ChooseSaveFile(string filename);
+        Task<string> ChooseOpenYamlFile();
+        Task<string> ChooseSaveYamlFile(string filename);
+        Task<string> ChooseOpenMediaFile();
+        Task<string> ChooseOpenImageFile();
     }
 }

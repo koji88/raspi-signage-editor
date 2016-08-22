@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ReactiveUI;
+using System.IO;
 
 namespace RaspiSignageEditor.Shared.ViewModels
 {
@@ -99,10 +100,11 @@ namespace RaspiSignageEditor.Shared.ViewModels
 
         #region Commands
         public ReactiveCommand<object> RemoveCommand { get; private set; }
+        public ReactiveCommand<object> AddCommand { get; private set; }
         #endregion
 
         #region Constructors
-        public PlayListViewModel()
+        public PlayListViewModel(Interface.IFileChooserUi fileChooser)
         {
             _playList = new ReactiveList<PlaySetViewModel>();
 
@@ -114,6 +116,22 @@ namespace RaspiSignageEditor.Shared.ViewModels
                     _playList.Remove((PlaySetViewModel)p);
                     this.RaisePropertyChanged("PlayList");
                 }
+            });
+
+            AddCommand = ReactiveCommand.Create();
+            AddCommand.Subscribe(_ =>
+            {
+                var filename = fileChooser.ChooseOpenMediaFile().Result;
+                if (File.Exists(filename))
+                {
+                    _playList.Add(new PlaySetViewModel(new Data.PlaySet()
+                    {
+                        FileName = Path.GetFileName(filename),
+                        FuncNumber = -1,
+                        SignageTopDir = "/mnt/usbdisk/"
+                    }));
+                }
+                
             });
         }
         #endregion

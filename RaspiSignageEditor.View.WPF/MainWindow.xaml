@@ -97,6 +97,7 @@
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
                             <Label Content="操作ボタン" />
                             <ListBox Grid.Row="1" 
@@ -139,7 +140,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ListBox>
                             <Button Grid.Row="2" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,4" Command="{Binding Path=Commands.AddCommand}" />
-                            <Label Grid.Row="3" Content="再生リスト　ファイルを追加するには、下のリストにファイルをドラッグしてください。" />
+                            <Label Grid.Row="3" Content="再生リスト" />
                             <ListBox Grid.Row="4" Name="_playListBox"
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
@@ -188,6 +189,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ListBox>
+                            <Button Grid.Row="5" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,4" Command="{Binding Path=PlayList.AddCommand}" />
                         </Grid>
                     </ScrollViewer>
                 </TabItem>
@@ -196,7 +198,10 @@
                         <StackPanel Margin="4">
                             <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoStart}" Content="起動時に再生を開始する"  Margin="4" />
                             <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoNext}" Content="再生が終わったら、次のアイテムを再生する"  Margin="4" />
-                            <Label Content="再生が停止中に表示する画像:" Margin="4" />
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="再生が停止中に表示する画像:" Margin="4" />
+                                <Button Content="開く" Command="{Binding Path=Option.OpenIdlefileCommand}" Padding="16,0" Margin="4" />
+                            </StackPanel>                            
                             <TextBox Text="{Binding Path=Option.Option.IdleFile}" Margin="4" />
                         </StackPanel>
                     </Grid>
@@ -222,6 +227,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="画面消去用画像:" Margin="4" />
+                                    <Button Content="開く" Command="{Binding Path=Option.OpenClearImageCommand}" Padding="16,0" Margin="4" />
                                     <TextBox Text="{Binding Path=Option.Option.ClearImage}" Width="200" Margin="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
