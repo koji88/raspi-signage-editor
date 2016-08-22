@@ -23,6 +23,12 @@
                 <x:Type TypeName="data:FuncCommand" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <ObjectDataProvider x:Key="AudioOutput" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="data:AudioOutput" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
         <Style x:Key="ImageButton" TargetType="{x:Type Button}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
@@ -207,20 +213,24 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="再生設定">
-                    <Grid>
-                        <StackPanel Margin="8">
-                            <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoStart}" Content="起動時に再生を開始する"  Margin="4" />
-                            <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoNext}" Content="再生が終わったら、次のアイテムを再生する"  Margin="4" />
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="再生が停止中に再生するファイル:" Margin="4" />
-                                <TextBox Text="{Binding Path=Option.Option.IdleFile}" Margin="4" Width="200" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                                <Button Content="開く" Command="{Binding Path=Option.OpenIdlefileCommand}" Padding="16,0" Margin="4" />
-                            </StackPanel>                           
+                    <Grid Margin="8">
+                        <StackPanel>
+                            <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoStart}" Content="起動時に再生を開始する"  Margin="8" />
+                            <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoNext}" Content="再生が終わったら、次のアイテムを再生する"  Margin="8" />
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <Label Content="再生が停止中に再生するファイル:" VerticalContentAlignment="Center" />
+                                <TextBox Text="{Binding Path=Option.Option.IdleFile}" Width="200" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="8,0" />
+                                <Button Content="開く" Command="{Binding Path=Option.OpenIdlefileCommand}" Padding="16,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <Label Content="音声出力" />
+                                <ComboBox Margin="8,0" Width="96" ItemsSource="{Binding Source={StaticResource AudioOutput}}" SelectedValue="{Binding Path=Option.Option.Audio}" />
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="システム設定">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="8">
                         <Grid >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.5*" />

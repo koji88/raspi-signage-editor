@@ -70,7 +70,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
             {
                 var ret = new Dictionary<string, object>();
                 ret["ntri"] = _ntrigger;
-                ret["n"] = _nlist.Select(x => x.Value).ToArray();
+                ret["n"] = _nlist.Select(x => (object)x.Value).ToArray();
                 
                 foreach(var v in _ngpio)
                 {

@@ -7,6 +7,13 @@ using System.IO;
 
 namespace RaspiSignageEditor.Shared.Data
 {
+    public enum AudioOutput
+    {
+        hdmi,
+        local,
+        both
+    }
+
     public class Option
     {
         [YamlMember(Alias = "autostart")]
@@ -65,6 +72,9 @@ namespace RaspiSignageEditor.Shared.Data
         [YamlMember(Alias = "port")]
         public int Port { get; set; }
 
+        [YamlMember(Alias = "audio")]
+        public AudioOutput Audio { get; set; }
+
         [YamlIgnore]
         public string SignageTopDir { get; set; }
 
@@ -78,6 +88,7 @@ namespace RaspiSignageEditor.Shared.Data
             Exit = 7;
             IsRemote = true;
             Port = 8888;
+            Audio = AudioOutput.both;
 
             IdleFile = "top.jpg";
             ClearImage = "black.png";
@@ -178,7 +189,7 @@ namespace RaspiSignageEditor.Shared.Data
         {
             using (var writer = new StreamWriter(filename))
             {
-                var serializer = new Serializer();
+                var serializer = new Serializer(SerializationOptions.EmitDefaults);
                 serializer.Serialize(writer, this);
             }
             return true;
