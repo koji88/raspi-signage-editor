@@ -94,6 +94,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
                 {
                     saveToData();
                     _configData.SaveData(_configFilename);
+                    loadFromData();
                 }
             });
 
@@ -106,9 +107,13 @@ namespace RaspiSignageEditor.Shared.ViewModels
                     _configFilename = filename;
                     saveToData();
                     _configData.SaveData(_configFilename);
+                    loadFromData();
                 }
 
             });
+
+            ExitCommand = ReactiveCommand.Create();
+            ExitCommand.Subscribe(_ => Environment.Exit(0));                
 
             loadFromData();
         }

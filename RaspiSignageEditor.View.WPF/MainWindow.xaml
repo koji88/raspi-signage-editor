@@ -9,8 +9,13 @@
         xmlns:data="clr-namespace:RaspiSignageEditor.Shared.Data"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"        
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"                
         mc:Ignorable="d"
-        Title="rspi-signage-editor" Height="600" Width="800" WindowStyle="ThreeDBorderWindow">
+        Title="rspi-signage-editor" Height="768" Width="1024" WindowStyle="ThreeDBorderWindow">
     <Window.Resources>
         <converter:IntToStrConverter x:Key="IntToStrConverter" />
         <ObjectDataProvider x:Key="FuncCommand" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -37,7 +42,7 @@
                     <MenuItem Header="開く" Command="{Binding OpenFileCommand}" />
                     <MenuItem Header="保存" Command="{Binding SaveFileCommand}" />
                     <MenuItem Header="名前をつけて保存" Command="{Binding SaveFileAsCommand}" />
-                    <MenuItem Header="終了" Command="{Binding ExitAppCommand}" />
+                    <MenuItem Header="終了" Command="{Binding ExitCommand}" />
                 </MenuItem>
             </Menu>
             <ToolBarTray DockPanel.Dock="Top">
@@ -90,16 +95,16 @@
             <TabControl x:Name="tabControl" DockPanel.Dock="Top">
                 <TabItem Header="ボタン割当">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <Grid>
+                        <Grid Margin="8,0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="32" />
+                                <RowDefinition Height="48" />
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="48"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
-                            <Label Content="操作ボタン" />
+                            <Label Content="操作ボタン" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
                             <ListBox Grid.Row="1" 
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"             
@@ -132,15 +137,15 @@
                                                 <ColumnDefinition Width="48"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <Label Content="≡" HorizontalContentAlignment="Center" />
-                                            <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=Key}" />
-                                            <ComboBox Grid.Column="2" ItemsSource="{Binding Source={StaticResource FuncCommand}}" SelectedValue="{Binding Path=Value}" />
-                                            <Button Grid.Column="3" Content="x" Width="32" Command="{Binding DataContext.Commands.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
+                                            <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=Key}" />
+                                            <ComboBox Grid.Column="2" Margin="8,0" ItemsSource="{Binding Source={StaticResource FuncCommand}}" SelectedValue="{Binding Path=Value}" />
+                                            <Button Grid.Column="3" Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.Commands.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ListBox>
-                            <Button Grid.Row="2" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,4" Command="{Binding Path=Commands.AddCommand}" />
-                            <Label Grid.Row="3" Content="再生リスト" />
+                            <Button Grid.Row="2" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,0" Command="{Binding Path=Commands.AddCommand}" />
+                            <Label Grid.Row="3" Content="再生リスト" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
                             <ListBox Grid.Row="4" Name="_playListBox"
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
@@ -180,29 +185,29 @@
                                                 <ColumnDefinition Width="48"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <Label Content="≡" HorizontalContentAlignment="Center" />
-                                            <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=FuncNumber}" />
-                                            <TextBox Grid.Column="2" Text="{Binding Path=FileName}" HorizontalContentAlignment="Center" />
-                                            <CheckBox Grid.Column="3" IsChecked="{Binding Path=IsLoop}" HorizontalAlignment="Center" />
-                                            <TextBox Grid.Column="4" Text="{Binding Path=TimeOut,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                            <Button Grid.Column="5" Content="x" Width="32" Command="{Binding DataContext.PlayList.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
+                                            <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=FuncNumber}" />
+                                            <TextBox Grid.Column="2" Margin="8,0" Text="{Binding Path=FileName}" HorizontalContentAlignment="Center" />
+                                            <CheckBox Grid.Column="3" Margin="8,0" IsChecked="{Binding Path=IsLoop}" HorizontalAlignment="Center" />
+                                            <TextBox Grid.Column="4" Margin="8,0" Text="{Binding Path=TimeOut,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                            <Button Grid.Column="5"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.PlayList.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ListBox>
-                            <Button Grid.Row="5" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,4" Command="{Binding Path=PlayList.AddCommand}" />
+                            <Button Grid.Row="5" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,0" Command="{Binding Path=PlayList.AddCommand}" />
                         </Grid>
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="再生設定">
                     <Grid>
-                        <StackPanel Margin="4">
+                        <StackPanel Margin="8">
                             <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoStart}" Content="起動時に再生を開始する"  Margin="4" />
                             <CheckBox IsChecked="{Binding Path=Option.Option.IsAutoNext}" Content="再生が終わったら、次のアイテムを再生する"  Margin="4" />
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="再生が停止中に表示する画像:" Margin="4" />
+                                <Label Content="再生が停止中に再生するファイル:" Margin="4" />
+                                <TextBox Text="{Binding Path=Option.Option.IdleFile}" Margin="4" Width="200" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                                 <Button Content="開く" Command="{Binding Path=Option.OpenIdlefileCommand}" Padding="16,0" Margin="4" />
-                            </StackPanel>                            
-                            <TextBox Text="{Binding Path=Option.Option.IdleFile}" Margin="4" />
+                            </StackPanel>                           
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -213,32 +218,32 @@
                                 <RowDefinition Height="0.5*" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            <StackPanel Margin="4">
-                                <Label Content="システム設定" Margin="4" />
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel>
+                                <Label Content="システム設定" Margin="4"  FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Margin="8,0">
                                     <CheckBox IsChecked="{Binding Path=Option.Option.IsPullup}" Content="プルアップ入力回路"  Margin="4" />
                                     <CheckBox IsChecked="{Binding Path=Option.Option.IsnTriToggle}" Content="トリガーボタンのOFFもトリガーとする"  Margin="4" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="4">
+                                <StackPanel Orientation="Horizontal" Margin="8">
                                     <Label Content="バウンス時間(ms):" />
                                     <TextBox Text="{Binding Path=Option.Option.BounceTime,Converter={StaticResource IntToStrConverter}}" Width="100" Margin="4" TextAlignment="Center" />
                                     <Label Content="終了ファンクション番号:" />
                                     <TextBox Text="{Binding Path=Option.Option.Exit,Converter={StaticResource IntToStrConverter}}" Width="100" Margin="4" TextAlignment="Center" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="8,0">
                                     <Label Content="画面消去用画像:" Margin="4" />
-                                    <Button Content="開く" Command="{Binding Path=Option.OpenClearImageCommand}" Padding="16,0" Margin="4" />
                                     <TextBox Text="{Binding Path=Option.Option.ClearImage}" Width="200" Margin="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                                    <Button Content="開く" Command="{Binding Path=Option.OpenClearImageCommand}" Padding="16,0" Margin="4" Height="24" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
                                     <CheckBox IsChecked="{Binding Path=Option.Option.IsRemote}" Content="リモートサーバーを有効にする" VerticalContentAlignment="Center" />
                                     <Label Content="ポート番号:" VerticalContentAlignment="Center" Margin="16,0,0,0" />
                                     <TextBox Text="{Binding Path=Option.Option.Port,Converter={StaticResource IntToStrConverter}}" Width="100" Margin="4" TextAlignment="Center" VerticalContentAlignment="Center" />
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Grid.Row="1">
-                                <Label Content="GPIO設定" />
-                                <StackPanel Orientation="Horizontal">
+                                <Label Content="GPIO設定" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
+                                <StackPanel Orientation="Horizontal" Margin="8,0">
                                     <Label Content="Nトリガー:" />
                                     <TextBox Text="{Binding Path=GPIO.NTrigger,Converter={StaticResource IntToStrConverter}}" Width="100" Margin="4" TextAlignment="Center" VerticalContentAlignment="Center" />
                                 </StackPanel>
@@ -280,9 +285,9 @@
                                                                 <ColumnDefinition Width="96"></ColumnDefinition>
                                                                 <ColumnDefinition Width="48"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0" TextAlignment="Center" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" Width="64" />
-                                                            <TextBox Grid.Column="1" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" Width="64" />
-                                                            <Button Grid.Column="2" Content="x" Width="32" Command="{Binding DataContext.GPIO.RemoveNCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
+                                                            <TextBlock Grid.Column="0" Margin="8,0"  TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" Width="64" />
+                                                            <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" Width="64" />
+                                                            <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.GPIO.RemoveNCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
@@ -323,9 +328,9 @@
                                                                 <ColumnDefinition Width="96"></ColumnDefinition>
                                                                 <ColumnDefinition Width="48"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBox Grid.Column="0" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                                            <TextBox Grid.Column="1" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                                            <Button Grid.Column="2" Content="x" Width="32" Command="{Binding DataContext.GPIO.RemoveGPIOCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
+                                                            <TextBox Grid.Column="0" Margin="8,0" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                                            <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                                            <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.GPIO.RemoveGPIOCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
