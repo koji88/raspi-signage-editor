@@ -36,7 +36,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
             OpenIdlefileCommand.Subscribe(_ =>
             {
                 var filename = fileChooser.ChooseOpenMediaFile().Result;
-                if(File.Exists(filename))
+                if(File.Exists(filename) && Directory.GetCurrentDirectory() == Path.GetDirectoryName(filename))
                 {
                     _option.IdleFile = Path.GetFileName(filename);
                     this.RaisePropertyChanged("Option");
@@ -47,7 +47,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
             OpenClearImageCommand.Subscribe(_ =>
             {
                 var filename = fileChooser.ChooseOpenImageFile().Result;
-                if (File.Exists(filename))
+                if (File.Exists(filename) && Directory.GetCurrentDirectory() == Path.GetDirectoryName(filename))
                 {
                     _option.ClearImage = Path.GetFileName(filename);
                     this.RaisePropertyChanged("Option");

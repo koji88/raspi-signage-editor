@@ -122,7 +122,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
             AddCommand.Subscribe(_ =>
             {
                 var filename = fileChooser.ChooseOpenMediaFile().Result;
-                if (File.Exists(filename))
+                if (File.Exists(filename) && Directory.GetCurrentDirectory() == Path.GetDirectoryName(filename))
                 {
                     _playList.Add(new PlaySetViewModel(new Data.PlaySet()
                     {
