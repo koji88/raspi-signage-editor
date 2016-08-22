@@ -174,12 +174,12 @@ namespace RaspiSignageEditor.Shared.Data
             PlayList.Add(new PlaySet() { FuncNumber = 5, FileName = "sample.jpg", TimeOut = 10 });
         }
 
-        public static bool SaveData(string filename, RaspiSignageConfig config)
+        public bool SaveData(string filename)
         {
             using (var writer = new StreamWriter(filename))
             {
                 var serializer = new Serializer();
-                serializer.Serialize(writer, config);
+                serializer.Serialize(writer, this);
             }
             return true;
         }

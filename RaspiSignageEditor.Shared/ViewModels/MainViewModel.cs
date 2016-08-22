@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using ReactiveUI;
+using System.IO;
 
 namespace RaspiSignageEditor.Shared.ViewModels
 {
@@ -43,10 +44,14 @@ namespace RaspiSignageEditor.Shared.ViewModels
         #endregion
 
         #region Commands
+        public ReactiveCommand<object> OpenFileCommand { get; private set; }
+        public ReactiveCommand<object> SaveFileCommand { get; private set; }
+        public ReactiveCommand<object> SaveFileAsCommand { get; private set; }
+        public ReactiveCommand<object> ExitCommand { get; private set; }
         #endregion
 
         #region Constructors
-        public MainViewModel()
+        public MainViewModel(Interface.IFileChooserUi filechooser)
         {
             _gpio = new GPIOViewModel();
             _option = new OptionViewModel();
@@ -54,6 +59,47 @@ namespace RaspiSignageEditor.Shared.ViewModels
             _commands = new CommandViewModel();
 
             _configData = new Data.RaspiSignageConfig();
+            _configFilename = "raspi-signage.yml";
+
+            OpenFileCommand = ReactiveCommand.Create();
+            OpenFileCommand.Subscribe(_ =>
+            {
+                var filename = filechooser.ChooseOpenFile().Result;
+                if (File.Exists(filename))
+                {
+                    var result = Data.RaspiSignageConfig.LoadData(filename);
+                    if(result.Item1)
+                    {
+                        _configData = result.Item2;
+                        loadFromData();
+                        _configFilename = filename;
+                    }
+                }
+                
+            });
+
+            SaveFileCommand = ReactiveCommand.Create();
+            SaveFileCommand.Subscribe(_ =>
+            {
+                if(!string.IsNullOrEmpty(_configFilename))
+                {
+                    saveToData();
+                    _configData.SaveData(_configFilename);
+                }
+            });
+
+            SaveFileAsCommand = ReactiveCommand.Create();
+            SaveFileAsCommand.Subscribe(_ =>
+            {
+                var filename = filechooser.ChooseSaveFile(_configFilename).Result;
+                if(!string.IsNullOrEmpty(filename))
+                {
+                    _configFilename = filename;
+                    saveToData();
+                    _configData.SaveData(_configFilename);
+                }
+
+            });
 
             loadFromData();
         }
@@ -64,6 +110,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
 
         #region private members
         private Data.RaspiSignageConfig _configData;
+        private string _configFilename;
         #endregion
 
         #region private methods

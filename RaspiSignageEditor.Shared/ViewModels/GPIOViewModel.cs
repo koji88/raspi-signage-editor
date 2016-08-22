@@ -81,8 +81,11 @@ namespace RaspiSignageEditor.Shared.ViewModels
 
             set
             {
-                var nlist = new List<KeyValueSet<int,int>>();
-                var ngpio = new List<KeyValueSet<int,int>>();
+                // var nlist = new List<KeyValueSet<int,int>>();
+                // var ngpio = new List<KeyValueSet<int,int>>();
+                _nlist.Clear();
+                _ngpio.Clear();
+
                 int ivalue;
                 foreach (var v in value)
                 {
@@ -105,7 +108,7 @@ namespace RaspiSignageEditor.Shared.ViewModels
                                 {
                                     if(int.TryParse(o.ToString(),out ivalue))
                                     {
-                                        nlist.Add(new KeyValueSet<int, int>(nlist.Count, ivalue));
+                                        _nlist.Add(new KeyValueSet<int, int>(_nlist.Count, ivalue));
                                     }
                                 }
                             }
@@ -114,15 +117,11 @@ namespace RaspiSignageEditor.Shared.ViewModels
                             int ikey;
                             if(int.TryParse(v.Value.ToString(),out ivalue) && int.TryParse(v.Key,out ikey))
                             {
-                                ngpio.Add(new KeyValueSet<int, int>(ikey, ivalue));
+                                _ngpio.Add(new KeyValueSet<int, int>(ikey, ivalue));
                             }
                             break;
                     }
                 }
-                NList.Clear();
-                NList.AddRange(nlist);
-                NGPIO.Clear();
-                NGPIO.AddRange(ngpio);
                 updateFuncNumbers();
             }
         }
@@ -195,7 +194,10 @@ namespace RaspiSignageEditor.Shared.ViewModels
         private void updateFuncNumbers()
         {
             _funcNumbers.Clear();
-            _funcNumbers.AddRange(enumFuncNumber().Distinct());
+            foreach(var v in enumFuncNumber().Distinct())
+            {
+                _funcNumbers.Add(v);
+            }
             _funcNumbers.Sort();
         }
 

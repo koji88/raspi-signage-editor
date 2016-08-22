@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RaspiSignageEditor.Shared.ViewModels;
 
 namespace RaspiSignageEditor.View.WPF
 {
@@ -23,6 +24,7 @@ namespace RaspiSignageEditor.View.WPF
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel(new FileChooserUi());
         }
     }
 }

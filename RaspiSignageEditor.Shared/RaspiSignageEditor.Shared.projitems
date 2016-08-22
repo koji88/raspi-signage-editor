@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\RaspiSignageConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interface\IFileChooserUi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CommandViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GPIOViewModel.cs" />
