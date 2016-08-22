@@ -38,13 +38,16 @@
     <Grid>
         <DockPanel >
             <Menu VerticalAlignment="Top" DockPanel.Dock="Top"  Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
+                <MenuItem Header="保存" Command="{Binding SaveFileCommand}" />
+                <!--
                 <MenuItem Header="ファイル">
                     <MenuItem Header="開く" Command="{Binding OpenFileCommand}" />
-                    <MenuItem Header="保存" Command="{Binding SaveFileCommand}" />
                     <MenuItem Header="名前をつけて保存" Command="{Binding SaveFileAsCommand}" />
                     <MenuItem Header="終了" Command="{Binding ExitCommand}" />
                 </MenuItem>
+                -->
             </Menu>
+            <!--
             <ToolBarTray DockPanel.Dock="Top">
                 <ToolBar>
                     <Button Command="{Binding OpenFileCommand}" Width="32" Height="32" Margin="16,4,4,4" ToolTip="Open" Style="{DynamicResource ImageButton}">
@@ -92,6 +95,7 @@
                     </Button>                    
                 </ToolBar>
             </ToolBarTray>
+            -->
             <TabControl x:Name="tabControl" DockPanel.Dock="Top">
                 <TabItem Header="ボタン割当">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -105,55 +109,80 @@
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
                             <Label Content="操作ボタン" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
-                            <ListBox Grid.Row="1" 
+                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                                <ListBox
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"             
                              ItemsSource="{Binding Path=Commands.Commands}">
-                                <ListBox.Template>
-                                    <ControlTemplate>
-                                        <DockPanel LastChildFill="True">
-                                            <Grid DockPanel.Dock="Top" Height="30">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid DockPanel.Dock="Top" Height="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="32"></ColumnDefinition>
+                                                        <ColumnDefinition Width="64"></ColumnDefinition>
+                                                        <ColumnDefinition Width="300"></ColumnDefinition>
+                                                        <ColumnDefinition Width="48"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="1" HorizontalContentAlignment="Center">ボタン</Label>
+                                                    <Label Grid.Column="2" HorizontalContentAlignment="Center">コマンド</Label>
+                                                    <Label Grid.Column="3" HorizontalContentAlignment="Center">削除</Label>
+                                                </Grid>
+                                                <ItemsPresenter></ItemsPresenter>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,2">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="32"></ColumnDefinition>
                                                     <ColumnDefinition Width="64"></ColumnDefinition>
                                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                                     <ColumnDefinition Width="48"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <Label Grid.Column="1" HorizontalContentAlignment="Center">ボタン</Label>
-                                                <Label Grid.Column="2" HorizontalContentAlignment="Center">コマンド</Label>
-                                                <Label Grid.Column="3" HorizontalContentAlignment="Center">削除</Label>
+                                                <Label Content="≡" HorizontalContentAlignment="Center" />
+                                                <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=Key}" />
+                                                <ComboBox Grid.Column="2" Margin="8,0" ItemsSource="{Binding Source={StaticResource FuncCommand}}" SelectedValue="{Binding Path=Value}" />
+                                                <Button Grid.Column="3" Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.Commands.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                             </Grid>
-                                            <ItemsPresenter></ItemsPresenter>
-                                        </DockPanel>
-                                    </ControlTemplate>
-                                </ListBox.Template>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,2">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="32"></ColumnDefinition>
-                                                <ColumnDefinition Width="64"></ColumnDefinition>
-                                                <ColumnDefinition Width="300"></ColumnDefinition>
-                                                <ColumnDefinition Width="48"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Content="≡" HorizontalContentAlignment="Center" />
-                                            <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=Key}" />
-                                            <ComboBox Grid.Column="2" Margin="8,0" ItemsSource="{Binding Source={StaticResource FuncCommand}}" SelectedValue="{Binding Path=Value}" />
-                                            <Button Grid.Column="3" Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.Commands.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ListBox>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ListBox>
+                            </Border>
                             <Button Grid.Row="2" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,0" Command="{Binding Path=Commands.AddCommand}" />
                             <Label Grid.Row="3" Content="再生リスト" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
-                            <ListBox Grid.Row="4" Name="_playListBox"
+                            <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
+                                <ListBox Name="_playListBox" 
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
                              ItemsSource="{Binding Path=PlayList.PlayList}">
-                                <ListBox.Template>
-                                    <ControlTemplate>
-                                        <DockPanel LastChildFill="True">
-                                            <Grid DockPanel.Dock="Top" Height="30">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid DockPanel.Dock="Top" Height="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="32"></ColumnDefinition>
+                                                        <ColumnDefinition Width="64"></ColumnDefinition>
+                                                        <ColumnDefinition Width="300"></ColumnDefinition>
+                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                        <ColumnDefinition Width="48"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Grid.Column="0"></Label>
+                                                    <Label Grid.Column="1" HorizontalContentAlignment="Center">ボタン</Label>
+                                                    <Label Grid.Column="2" HorizontalContentAlignment="Center">ファイル名</Label>
+                                                    <Label Grid.Column="3" HorizontalContentAlignment="Center">ループ(動画)</Label>
+                                                    <Label Grid.Column="4" HorizontalContentAlignment="Center">再生秒数(画像)</Label>
+                                                    <Label Grid.Column="5" HorizontalContentAlignment="Center">削除</Label>
+                                                </Grid>
+                                                <ItemsPresenter></ItemsPresenter>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,2">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="32"></ColumnDefinition>
                                                     <ColumnDefinition Width="64"></ColumnDefinition>
@@ -162,38 +191,17 @@
                                                     <ColumnDefinition Width="96"></ColumnDefinition>
                                                     <ColumnDefinition Width="48"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <Label Grid.Column="0"></Label>
-                                                <Label Grid.Column="1" HorizontalContentAlignment="Center">ボタン</Label>
-                                                <Label Grid.Column="2" HorizontalContentAlignment="Center">ファイル名</Label>
-                                                <Label Grid.Column="3" HorizontalContentAlignment="Center">ループ(動画)</Label>
-                                                <Label Grid.Column="4" HorizontalContentAlignment="Center">再生秒数(画像)</Label>
-                                                <Label Grid.Column="5" HorizontalContentAlignment="Center">削除</Label>
+                                                <Label Content="≡" HorizontalContentAlignment="Center" />
+                                                <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=FuncNumber}" />
+                                                <TextBox Grid.Column="2" Margin="8,0" Text="{Binding Path=FileName}" HorizontalContentAlignment="Center" />
+                                                <CheckBox Grid.Column="3" Margin="8,0" IsChecked="{Binding Path=IsLoop}" HorizontalAlignment="Center" />
+                                                <TextBox Grid.Column="4" Margin="8,0" Text="{Binding Path=TimeOut,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                                <Button Grid.Column="5"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.PlayList.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                             </Grid>
-                                            <ItemsPresenter></ItemsPresenter>
-                                        </DockPanel>
-                                    </ControlTemplate>
-                                </ListBox.Template>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,2">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="32"></ColumnDefinition>
-                                                <ColumnDefinition Width="64"></ColumnDefinition>
-                                                <ColumnDefinition Width="300"></ColumnDefinition>
-                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                <ColumnDefinition Width="48"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Content="≡" HorizontalContentAlignment="Center" />
-                                            <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding DataContext.GPIO.FuncNumbers,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" SelectedValue="{Binding Path=FuncNumber}" />
-                                            <TextBox Grid.Column="2" Margin="8,0" Text="{Binding Path=FileName}" HorizontalContentAlignment="Center" />
-                                            <CheckBox Grid.Column="3" Margin="8,0" IsChecked="{Binding Path=IsLoop}" HorizontalAlignment="Center" />
-                                            <TextBox Grid.Column="4" Margin="8,0" Text="{Binding Path=TimeOut,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                            <Button Grid.Column="5"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.PlayList.RemoveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ListBox>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ListBox>
+                            </Border>
                             <Button Grid.Row="5" Content="追加" Padding="16,0" HorizontalAlignment="Left" Margin="36,4,4,0" Command="{Binding Path=PlayList.AddCommand}" />
                         </Grid>
                     </ScrollViewer>
@@ -259,39 +267,41 @@
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Vertical" Margin="8">
                                             <Label Content="Nリスト:" />
-                                            <ListBox ItemsSource="{Binding Path=GPIO.NList}" >
-                                                <ListBox.Template>
-                                                    <ControlTemplate>
-                                                        <DockPanel LastChildFill="True">
-                                                            <Grid DockPanel.Dock="Top" Height="30">
+                                            <Border BorderBrush="Black" BorderThickness="1">
+                                                <ListBox ItemsSource="{Binding Path=GPIO.NList}" >
+                                                    <ListBox.Template>
+                                                        <ControlTemplate>
+                                                            <DockPanel LastChildFill="True">
+                                                                <Grid DockPanel.Dock="Top" Height="30">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                                        <ColumnDefinition Width="48"></ColumnDefinition>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Label Grid.Column="0" HorizontalContentAlignment="Center">Bit</Label>
+                                                                    <Label Grid.Column="1" HorizontalContentAlignment="Center">GPIO</Label>
+                                                                    <Label Grid.Column="2" HorizontalContentAlignment="Center">削除</Label>
+                                                                </Grid>
+                                                                <ItemsPresenter></ItemsPresenter>
+                                                            </DockPanel>
+                                                        </ControlTemplate>
+                                                    </ListBox.Template>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Margin="0,2">
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="96"></ColumnDefinition>
                                                                     <ColumnDefinition Width="96"></ColumnDefinition>
                                                                     <ColumnDefinition Width="48"></ColumnDefinition>
                                                                 </Grid.ColumnDefinitions>
-                                                                <Label Grid.Column="0" HorizontalContentAlignment="Center">Bit</Label>
-                                                                <Label Grid.Column="1" HorizontalContentAlignment="Center">GPIO</Label>
-                                                                <Label Grid.Column="2" HorizontalContentAlignment="Center">削除</Label>
+                                                                <TextBlock Grid.Column="0" Margin="8,0"  TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" Width="64" />
+                                                                <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" Width="64" />
+                                                                <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.GPIO.RemoveNCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                                             </Grid>
-                                                            <ItemsPresenter></ItemsPresenter>
-                                                        </DockPanel>
-                                                    </ControlTemplate>
-                                                </ListBox.Template>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Margin="0,2">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                                <ColumnDefinition Width="48"></ColumnDefinition>
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0" Margin="8,0"  TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" Width="64" />
-                                                            <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" Width="64" />
-                                                            <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center"  Command="{Binding DataContext.GPIO.RemoveNCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ListBox>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ListBox>
+                                            </Border>
                                         </StackPanel>
                                         <Button Grid.Row="1" VerticalAlignment="Top" Content="追加" Padding="16,0" Height="24" HorizontalAlignment="Left" Margin="28,4,4,4" Command="{Binding Path=GPIO.AddNCommand}" />
                                     </Grid>
@@ -302,39 +312,41 @@
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Vertical" Margin="8">
                                             <Label Content="GPIOリスト:" />
-                                            <ListBox ItemsSource="{Binding Path=GPIO.NGPIO}">
-                                                <ListBox.Template>
-                                                    <ControlTemplate>
-                                                        <DockPanel LastChildFill="True">
-                                                            <Grid DockPanel.Dock="Top" Height="30">
+                                            <Border BorderBrush="Black" BorderThickness="1">
+                                                <ListBox ItemsSource="{Binding Path=GPIO.NGPIO}">
+                                                    <ListBox.Template>
+                                                        <ControlTemplate>
+                                                            <DockPanel LastChildFill="True">
+                                                                <Grid DockPanel.Dock="Top" Height="30">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                                        <ColumnDefinition Width="96"></ColumnDefinition>
+                                                                        <ColumnDefinition Width="48"></ColumnDefinition>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Label Grid.Column="0" HorizontalContentAlignment="Center">ボタン</Label>
+                                                                    <Label Grid.Column="1" HorizontalContentAlignment="Center">GPIO</Label>
+                                                                    <Label Grid.Column="2" HorizontalContentAlignment="Center">削除</Label>
+                                                                </Grid>
+                                                                <ItemsPresenter></ItemsPresenter>
+                                                            </DockPanel>
+                                                        </ControlTemplate>
+                                                    </ListBox.Template>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Margin="0,2">
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="96"></ColumnDefinition>
                                                                     <ColumnDefinition Width="96"></ColumnDefinition>
                                                                     <ColumnDefinition Width="48"></ColumnDefinition>
                                                                 </Grid.ColumnDefinitions>
-                                                                <Label Grid.Column="0" HorizontalContentAlignment="Center">ボタン</Label>
-                                                                <Label Grid.Column="1" HorizontalContentAlignment="Center">GPIO</Label>
-                                                                <Label Grid.Column="2" HorizontalContentAlignment="Center">削除</Label>
+                                                                <TextBox Grid.Column="0" Margin="8,0" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                                                <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
+                                                                <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.GPIO.RemoveGPIOCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                                             </Grid>
-                                                            <ItemsPresenter></ItemsPresenter>
-                                                        </DockPanel>
-                                                    </ControlTemplate>
-                                                </ListBox.Template>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Margin="0,2">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                                <ColumnDefinition Width="96"></ColumnDefinition>
-                                                                <ColumnDefinition Width="48"></ColumnDefinition>
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBox Grid.Column="0" Margin="8,0" Text="{Binding Path=Key,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                                            <TextBox Grid.Column="1" Margin="8,0" Text="{Binding Path=Value,Converter={StaticResource IntToStrConverter}}" HorizontalContentAlignment="Center" />
-                                                            <Button Grid.Column="2"  Margin="0" Content="X" Width="32" Padding="8,0" HorizontalContentAlignment="Center" Command="{Binding DataContext.GPIO.RemoveGPIOCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ListBox>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ListBox>
+                                            </Border>
                                         </StackPanel>
                                         <Button Grid.Row="1" VerticalAlignment="Top" Content="追加" Padding="16,0" Height="24" HorizontalAlignment="Left" Margin="16,4,4,4" Command="{Binding Path=GPIO.AddGPIOCommand}" />
                                     </Grid>
